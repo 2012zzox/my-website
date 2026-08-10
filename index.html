@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurboWarp 版本接口演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 { color: #333; font-size: 1.5rem; margin-bottom: 1rem; }
+        .version-box {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            border: 2px dashed #90caf9;
+        }
+        .info { color: #666; font-size: 0.9rem; line-height: 1.5; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>当前版本号</h1>
+        <div class="version-box" id="version-display">加载中...</div>
+        <p class="info">
+            此页面模拟了一个静态 API 端点。<br>
+            TurboWarp 可以通过请求 <code>version.json</code> 获取数据。
+        </p>
+        <p class="info" style="margin-top: 1rem; font-size: 0.8rem;">
+            数据来源: <a href="version.json" target="_blank">version.json</a>
+        </p>
+    </div>
+
+    <script>
+        // 前端自行加载展示，模拟 API 行为
+        fetch('version.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('version-display').textContent = data.version;
+            })
+            .catch(err => {
+                document.getElementById('version-display').textContent = "错误";
+                console.error("加载失败:", err);
+            });
+    </script>
+</body>
+</html>
