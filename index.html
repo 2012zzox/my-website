@@ -1,68 +1,57 @@
 
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TurboWarp 版本接口演示</title>
+<html>
+  <head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>It works!</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-        h1 { color: #333; font-size: 1.5rem; margin-bottom: 1rem; }
-        .version-box {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 1rem 0;
-            border: 2px dashed #90caf9;
-        }
-        .info { color: #666; font-size: 0.9rem; line-height: 1.5; }
-        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      h1 {
+        animation-name: rainbow;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+      h1, p {
+        margin: 0.8rem 0;
+      }
+      @keyframes rainbow {
+        0% { color: #ff0000; }
+        17% { color: #ffff00; }
+        33% { color: #00ff00; }
+        50% { color: #00ffff; }
+        67% { color: #0000ff; }
+        83% { color: #ff00ff; }
+        100% { color: #ff0000; }
+      }
     </style>
-</head>
-<body>
-    <div class="card">
-        <h1>当前版本号</h1>
-        <div class="version-box" id="version-display">加载中...</div>
-        <p class="info">
-            此页面模拟了一个静态 API 端点。<br>
-            TurboWarp 可以通过请求 <code>version.json</code> 获取数据。
-        </p>
-        <p class="info" style="margin-top: 1rem; font-size: 0.8rem;">
-            数据来源: <a href="version.json" target="_blank">version.json</a>
-        </p>
-    </div>
-
+  </head>
+  <head>
+    <main>
+      <h1>It works!</h1>
+      <p><button class="clickme">Click me!</button></p>
+      <input type="text" class="input" value="0.1.0"> <button class="send">Send!</button>
+      <p class="received"></p>
+      <p>Many websites block other sites from embedding them for security reasons. Blocks like "mouse x" and "mouse down?" will not work while the cursor is over the frame unless you use the disable interactivity block.</p>
+    </main>
     <script>
-        // 前端自行加载展示，模拟 API 行为
-        fetch('version.json')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('version-display').textContent = data.version;
-            })
-            .catch(err => {
-                document.getElementById('version-display').textContent = "错误";
-                console.error("加载失败:", err);
-            });
+      let clicks = 0;
+      document.querySelector(".clickme").addEventListener("click", (e) => {
+        clicks++;
+        e.target.textContent = `Clicks: ${clicks}`;
+      });
+
+      window.parent.postMessage(message, "*"); 
+
+      window.addEventListener("message", (e) => {
+        if (e.source === window.parent && e.source !== window) {
+          document.querySelector(".received").textContent = `Last message received by iframe: ${e.data}`;
+        }
+      });
     </script>
-</body>
+  </head>
 </html>
