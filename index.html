@@ -1,52 +1,69 @@
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>TurboWarp Auto Send</title>
+<html>
+  <head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>It works!</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* 隐藏滚动条 */
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      h1 {
+        animation-name: rainbow;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+      h1, p {
+        margin: 0.8rem 0;
+      }
+      @keyframes rainbow {
+        0% { color: #ff0000; }
+        17% { color: #ffff00; }
+        33% { color: #00ff00; }
+        50% { color: #00ffff; }
+        67% { color: #0000ff; }
+        83% { color: #ff00ff; }
+        100% { color: #ff0000; }
+      }
     </style>
-</head>
-<body>
-
-    <!-- 
-      请将 src 替换为你自己的 TurboWarp 项目 embed 地址 
-      例如: https://turbowarp.org/414716080/embed
-    -->
-    <iframe id="twFrame" src="https://turbowarp.org/414716080/embed"></iframe>
-
+  </head>
+  <body>
+    <main>
+      <h1>It works!</h1>
+      <p>Transparent backgrounds are supported, and JavaScript works.</p>
+      <p><button class="clickme">Click me!</button></p>
+      <p>You can send messages between the extension and the iframe. Try sending this iframe a message.</p>
+      <input type="text" class="input" value="0.1.0"> <button class="send">Send!</button>
+      <p class="received"></p>
+      <p>Many websites block other sites from embedding them for security reasons. Blocks like "mouse x" and "mouse down?" will not work while the cursor is over the frame unless you use the disable interactivity block.</p>
+    </main>
     <script>
-        const iframe = document.getElementById('twFrame');
-        const messageToSend = "0.1.0"; // 你要发送的消息内容
+      let clicks = 0;
+      document.querySelector(".clickme").addEventListener("click", (e) => {
+        clicks++;
+        e.target.textContent = `Clicks: ${clicks}`;
+      });
 
-        // 核心逻辑：监听 iframe 加载完成事件
-        iframe.onload = function() {
-            console.log("Iframe loaded, sending message...");
-            
-            // 延迟一小段时间确保 TurboWarp 运行时已完全初始化
-            // 虽然 onload 通常足够，但加一点缓冲更稳健
-            setTimeout(() => {
-                if (iframe.contentWindow) {
-                    // 向 iframe 内部发送消息
-                    // '*' 表示允许发送给任何源，生产环境建议替换为 'https://turbowarp.org'
-                    iframe.contentWindow.postMessage(messageToSend, '*');
-                    console.log("Message sent:", messageToSend);
-                }
-            }, 500); 
-        };
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const message = document.querySelector(".input").value;
+          window.parent.postMessage(message, "*");
+          console.log("Auto-sent message:", message);
+        }, 1000); 
+      });
+
+      document.querySelector(".send").addEventListener("click", (e) => {
+        console.log("Click disabled for sending.");
+      });
+
+      window.addEventListener("message", (e) => {
+        if (e.source === window.parent && e.data !== undefined) {
+           document.querySelector(".received").textContent = "Last message received by iframe: " + e.data;
+        }
+      });
     </script>
-
-</body>
+  </body>
 </html>
